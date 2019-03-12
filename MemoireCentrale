@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    class MemoireCentrale : MemoireDynFixe
+    {
+        private char etat;
+
+        public MemoireCentrale(List<Partition> LPAR)//creation d'une MC 'constructeur'
+        {
+            memoire = new List<Partition>();
+            zonesLibres = new List<Partition>();
+            foreach (Partition par in LPAR)
+            {
+                memoire.Add(par);
+                zonesLibres.Add(par);
+            }
+        }
+        
+
+        public override void charger(Processus pro, Partition par)
+        { }
+
+        public override void arreter(Processus pro, Partition par)
+        {
+            int index;
+            index=memoire.IndexOf(par);
+            memoire[index].SetEtat(false);
+            pro = memoire[index].GetPrecessus();
+            pro.setetat('t');
+        }
+
+        public FileAtt RempProcess()
+        {
+            int i;
+            List<Processus> lpro = new List<Processus>();
+            Console.Out.WriteLine("ecrire le nombre des processus:");
+            string chaine = Console.In.ReadLine();
+            int nb = int.Parse(chaine);
+            for (i = 0; i < nb; i++)
+            {
+                char et = 'T';
+                Console.Out.WriteLine("donnez la taille de processus:");
+                chaine = Console.In.ReadLine();
+                int taille = int.Parse(chaine);
+                Console.Out.WriteLine("donnez le temp d'execution:");
+                chaine = Console.In.ReadLine();
+                int temp = int.Parse(chaine);
+                Console.Out.WriteLine("donnez le nom de processus:");
+                chaine = Console.In.ReadLine();
+                Processus pro = new Processus(chaine, taille, temp, et);
+                lpro.Add(pro);
+            }
+            fileAtt = new FileAtt(lpro);
+            return fileAtt;
+        }
+
+        public void ajzonelibre(Partition pr)
+        {
+            zonesLibres.Add(pr);
+        }
+
+        public void supzonelibre(Partition pr)
+        {
+            int indice;
+            indice = zonesLibres.IndexOf(pr);
+            zonesLibres.RemoveAt(indice);
+        }
+    }
+}
