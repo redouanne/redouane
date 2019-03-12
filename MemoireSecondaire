@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    class MemoireSecondaire
+    {
+      private List<Processus> MSS;
+      public MemoireSecondaire (List<Processus>lp)//'constructeur'
+        {
+            MSS = new List<Processus>();
+            foreach(Processus p in lp )
+            {
+                MSS.Add(p);
+            }
+        }
+
+      public void Ajprocess(Processus p)
+        {
+            MSS.Add(p);
+        }
+
+      public Processus Recupprocess(int indice)
+        {
+            Processus p;
+            p = MSS[indice];
+            MSS.RemoveAt(indice);
+            return p;
+        }
+
+    public Processus Affichepro(int indice)
+        {
+            return MSS[indice];
+        }
+
+    public void etatprocess(Processus p,char etat)
+        {
+            int indice;
+            indice = MSS.IndexOf(p);
+            MSS[indice].setetat(etat);
+        }
+    }
+}
