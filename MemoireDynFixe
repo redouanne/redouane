@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    abstract class MemoireDynFixe
+    {
+        protected List<Partition> memoire;
+        protected List<Partition> zonesLibres;
+        protected FileAtt fileAtt;
+
+        public void AfficherMemoire()
+        {
+            for (int i = 0; i < memoire.Count; i++)
+            {
+                memoire[i].afficher();
+            }
+        }
+
+        public void AfficherListeZoneLibre()
+        {
+            for (int i = 0; i < zonesLibres.Count; i++)
+            {
+                zonesLibres[i].afficher();
+            }
+        }
+
+        public void AfficherFileAttente()
+        {
+            fileAtt.afficherFile();
+        }
+
+        public abstract void charger(Processus pro, Partition par);
+        public abstract void arreter(Processus pro, Partition par);
+    }
+}
