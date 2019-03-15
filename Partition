@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    class Partition
+    {
+        private Processus process;
+        private int adresse;
+        private int taille;
+        private bool etat;
+
+        //Constructeur
+        public Partition(int adresse, int taille, bool etat)
+        {
+            this.taille = taille;
+            this.adresse = adresse;
+            this.etat = etat; //  si etat = vrai => alors la partition est occuppee. Sinon, elle est libre.
+        }
+        //Setters
+        public void SetTaille(int taille)
+        {
+            this.taille = taille;
+        }
+        public void SetAdresse(int adresse)
+        {
+            this.adresse = adresse;
+        }
+        public void SetEtat(bool etat)
+        {
+            this.etat = etat;
+        }
+
+        public void SetPrecessus(Processus process)
+        {
+            this.process = process;
+        }
+
+        //Geteur
+        public int GetTaille()
+        {
+            return taille;
+        }
+        public int GetAdresse()
+        {
+            return adresse;
+        }
+        public bool GetEtat()
+        {
+            return etat;
+        }
+
+        public Processus GetPrecessus()
+        {
+            return process;
+        }
+
+        public void Afficher()
+        {
+            if (etat == false) // libre
+                Console.WriteLine("Partition de taille : " + taille + " situé à l'adresse " + adresse + " . Elle est libre.");
+            else // occuppee
+            {
+                Console.Write("Partition de taille : " + taille + " situé à l'adresse " + adresse + " . Elle est occuppee par : ");
+                process.Afficher();
+            }
+        }
+    }
+}
