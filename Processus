@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    class Processus
+    {
+        private string nom;
+        private int taille;
+        private int temps;
+        private char etat; // T pour attente
+                           // A pour actif
+                           // B pour Bloqué                     
+                           // F pour fini
+
+        //constructeur
+        public Processus(string n, int t, int tp, char e)
+        {
+            nom = n;
+            taille = t;
+            temps = tp;
+            etat = e;
+        }
+
+        //getters
+        public string Getnom()
+        {
+            return nom;
+        }
+
+        public int Gettaille()
+        {
+            return taille;
+        }
+
+        public int Gettemps()
+        {
+            return temps;
+        }
+
+        public char Getetat()
+        {
+            return etat;
+        }
+
+        //setters
+        public void Setnom(string nn)
+        {
+            nom = nn;
+        }
+
+        public void Settaille(int tt)
+        {
+            taille = tt;
+        }
+
+        public void Settemps(int ttp)
+        {
+            temps = ttp;
+        }
+
+        public void Setetat(char ee)
+        {
+            etat = ee;
+        }
+
+        public void Afficher()
+        {
+            Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est " + etat + " .");
+        }
+    }
+}
