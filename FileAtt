@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Va_Et_Vient
+{
+    class FileAtt
+    {
+        private List<Processus> File;
+
+        /* public FileAtt (Processus Q, Processus R) // constructeur
+         {
+             File = new List<Processus>
+             {
+                 Q,
+                 R
+             };
+         }
+         */
+        public FileAtt(List<Processus> LP) // constructeur
+        {
+            File = new List<Processus>();
+            foreach (Processus ps in LP)
+            {
+                File.Add(ps);
+            }
+        }
+
+        public Processus Defiler()  // recuperer le 1er element de la file
+        {
+            Processus P;
+            P = File[0];      // le recuperer
+            File.RemoveAt(0);  // le supprimer de la file
+            return P;
+        }
+
+        public Processus ElementFile(int index)  // retourne l'element de la file dont l'index est 'index' pour pouvoir acceder aux differents attribut de cet element
+        {
+            return File[index];
+        }
+
+        public int Enfiler(Processus p)   // Ajoute un element a la file ( a la fin )
+        {
+            File.Add(p);
+            return 0;    // enfilement executé avec succés 
+        }
+
+        public int ModiferEtat(Processus P, char etatP)  // modifie l'etat d'un processus
+        {
+            int indexP;
+            indexP = File.IndexOf(P);   // recuperer l'index de P
+            File[indexP].Setetat(etatP); // changer l'etat de P ( le setter fais le travail ) 
+            return 0;  // modification effectuée avec succés
+        }
+
+        public void AfficherFile()
+        {
+            foreach (Processus ps in File)
+            {
+                ps.Afficher();
+            }
+        }
+    }
+}
