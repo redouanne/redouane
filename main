@@ -1,1 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Va_Et_Vient
+{
+    class Program
+    {
+        static void Main()
+        {
+            List<Partition> lipar = new List<Partition>();
+            Console.Out.WriteLine("donnez la taille de memoire centrale:");
+            string chaine = Console.In.ReadLine();
+            int tmc = int.Parse(chaine);
+            Console.Out.WriteLine("donnez le nombre de partitions:");
+            chaine = Console.In.ReadLine();
+            int nbpar = int.Parse(chaine);
+            if (nbpar==1)
+            {
+                lipar[0].SetAdresse(0);
+                lipar[0].SetTaille(tmc);
+                lipar[0].SetEtat(false);
+            }
+            else
+            {
+                int cpt, adr=0;
+                for(cpt=0;cpt<nbpar;cpt++)
+                {
+                    lipar[cpt].SetAdresse(adr);
+                    lipar[cpt].SetEtat(false);
+                    if (cpt != (nbpar - 1))
+                    {
+                        Console.Out.WriteLine("donnez la taille de partition:");
+                        chaine = Console.In.ReadLine();
+                        int tpar = int.Parse(chaine);
+                        while (tpar >= tmc)
+                        {
+                            Console.Out.WriteLine("Erreur. donnez la taille de partition:");
+                            chaine = Console.In.ReadLine();
+                            tpar = int.Parse(chaine);
+                        }
+                        lipar[cpt].SetTaille(tpar);
+                        tmc = tmc - tpar;
+                    }
+                    else
+                    {
+                        lipar[cpt].SetTaille(tmc);
+                    }
+                }
+            }
+            Swapping swap = new Swapping(lipar);
+            MemoireCentrale mc = swap.Getmc();
+            Console.Out.WriteLine("ecrire le nombre des processus:");
+            chaine = Console.In.ReadLine();
+            int nbpro = int.Parse(chaine);
+            FileAtt fa = mc.RempProcess(nbpro);
+            swap.Rempmc(fa, nbpro);
+        }
+    }
+}
