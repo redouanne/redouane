@@ -136,6 +136,14 @@ namespace Va_Et_Vient
             MC.Setzone(z);
         }
 
-    
+    public MemoireCentrale Getmc()
+        {
+           return MC;
+        }
+
+        public MemoireSecondaire Getms()
+        {
+            return MS;
+        }
     }
 }
