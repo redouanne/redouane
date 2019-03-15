@@ -1,1 +1,141 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Va_Et_Vient
+{
+    class Swapping
+    {
+        private MemoireCentrale MC;
+        private MemoireSecondaire MS;
+
+        public Swapping(List<Partition> lp)
+        {
+            MC = new MemoireCentrale(lp);
+        }
+
+        public void Rempmc(FileAtt file, int nbprocess)
+        {
+            Processus pr;
+            int taille, adr1, adr2, grandt, i = 0, k = 0;
+            List<Partition> lpz, mem;
+            List<Processus> mems=new List<Processus>();
+            bool b = true;
+            mem = MC.Getmemoire();
+            lpz = MC.Getzone();
+            Partition par = lpz.Last();
+            grandt = par.GetTaille();
+            while (nbprocess != 0)
+            {
+                pr = file.Defiler();
+                taille = pr.Gettaille();
+                lpz= MC.Getzone();
+                while (lpz[i]!= null && b)
+                {
+                    if (taille <= lpz[i].GetTaille())
+                    {
+                        b = false;
+                        adr1=lpz[i].GetAdresse();
+                    }
+                    i++;
+                }
+                if (b==false)
+                {
+                    k = 0;
+                    adr1 = lpz[i-1].GetAdresse();
+                    adr2 = mem[k].GetAdresse();
+                    while(adr2!=adr1)
+                    {
+                        k++;
+                        adr2 = mem[k].GetTaille();
+                    }
+                    mem[k].SetPrecessus(pr);
+                    mem[k].SetEtat(true);
+                    lpz.RemoveAt(i - 1);
+                }
+                else
+                {
+                    if (taille>=grandt)
+                    {
+                        mems.Add(pr);
+                    }
+                }
+            }
+            MC.Setmemoire(mem);
+            MC.Setzone(lpz);
+            MS = new MemoireSecondaire(mems);
+        }
+
+     public void Rempmsmc(int indicemc,int indicems)
+        {
+            Processus p= MS.Recupprocess(indicems);
+            List<Partition> lp = MC.Getmemoire();
+            lp[indicemc].SetPrecessus(p);
+            lp[indicemc].SetEtat(true);
+            MC.Setmemoire(lp);
+        }
+
+     public void EntrSrt(Partition par)
+        {
+            List<Partition> lpar = MC.Getmemoire();
+            List<Processus> lpro = MS.Getmemsec();
+            Processus pr;
+            int indice = lpar.IndexOf(par);
+            pr = lpar[indice].GetPrecessus();
+            lpar[indice].SetEtat(false);
+            lpro.Add(pr);
+            MC.Setmemoire(lpar);
+            MS.Setmemsec(lpro);
+        }
+
+     public void Rempzone()
+        {
+            List<Partition> lp = MC.Getmemoire();
+            List<Partition> z = new List<Partition>();
+            int i = 0, s = 0, k = 0,b=0, taille1, taille2;
+            bool e, r=true;
+            while (lp[i]!=null)
+            {
+                k = 0;
+                e = lp[i].GetEtat();
+                taille1 = lp[i].GetTaille();
+                if (e==false)
+                {
+                    while(z[k]!=null && r)
+                    {
+                        s = k;
+                        taille2 = z[k].GetTaille();
+                       if (taille1<=taille2)
+                        {
+                            r = false;
+                            while (z[s]!=null)
+                            {
+                                s++;
+                            }
+                            while(s>=k)
+                            {
+                                b = s - 1;
+                                z[s] = z[b];
+                                s--;
+                            }
+                            z[k] = lp[i];
+                        }
+                        k++;
+                    }
+                    if (r==true)
+                    {
+                        z[k] = lp[i];
+                    }
+                    
+                }
+                lp[i].SetEtat(true);
+                i++;
+            }
+            MC.Setzone(z);
+        }
+
+    
+    }
+}
