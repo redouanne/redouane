@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     class MemoireCentrale : MemoireDynFixe
     {
-        private char etat;
+
 
         public MemoireCentrale(List<Partition> LPAR)//creation d'une MC 'constructeur'
         {
@@ -20,27 +20,24 @@ namespace Va_Et_Vient
                 zonesLibres.Add(par);
             }
         }
-        
 
-        public override void charger(Processus pro, Partition par)
+
+        public override void Charger(Processus pro, Partition par)
         { }
 
-        public override void arreter(Processus pro, Partition par)
+
+        public override void Arreter(Processus pro, Partition par)
         {
             int index;
-            index=memoire.IndexOf(par);
+            index = memoire.IndexOf(par);
             memoire[index].SetEtat(false);
-            pro = memoire[index].GetPrecessus();
-            pro.setetat('t');
         }
 
-        public FileAtt RempProcess()
+        public FileAtt RempProcess(int nb)
         {
             int i;
             List<Processus> lpro = new List<Processus>();
-            Console.Out.WriteLine("ecrire le nombre des processus:");
-            string chaine = Console.In.ReadLine();
-            int nb = int.Parse(chaine);
+            string chaine;
             for (i = 0; i < nb; i++)
             {
                 char et = 'T';
@@ -59,16 +56,41 @@ namespace Va_Et_Vient
             return fileAtt;
         }
 
-        public void ajzonelibre(Partition pr)
+        public void Ajzonelibre(Partition pr)
         {
             zonesLibres.Add(pr);
         }
 
-        public void supzonelibre(Partition pr)
+        public void Supzonelibre(Partition pr)
         {
             int indice;
             indice = zonesLibres.IndexOf(pr);
             zonesLibres.RemoveAt(indice);
+        }
+
+        public List<Partition> Getmemoire()
+        {
+            return memoire;
+        }
+
+        public List<Partition> Getzone()
+        {
+            return zonesLibres;
+        }
+
+        public FileAtt Getfile()
+        {
+            return fileAtt;
+        }
+
+        public void Setmemoire(List<Partition> m)
+        {
+            memoire = m;
+        }
+
+        public void Setzone(List<Partition> z)
+        {
+            zonesLibres = z;
         }
     }
 }
