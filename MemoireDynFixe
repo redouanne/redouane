@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     abstract class MemoireDynFixe
     {
@@ -16,24 +16,28 @@ namespace Va_Et_Vient
         {
             for (int i = 0; i < memoire.Count; i++)
             {
-                memoire[i].afficher();
+                memoire[i].Afficher();
             }
         }
 
         public void AfficherListeZoneLibre()
         {
-            for (int i = 0; i < zonesLibres.Count; i++)
+            if (zonesLibres.Count() > 0)
             {
-                zonesLibres[i].afficher();
+                for (int i = 0; i < zonesLibres.Count; i++)
+                {
+                    zonesLibres[i].Afficher();
+                }
             }
+            else { Console.WriteLine("vide!!"); } 
         }
 
         public void AfficherFileAttente()
         {
-            fileAtt.afficherFile();
+            fileAtt.AfficherFile();
         }
 
-        public abstract void charger(Processus pro, Partition par);
-        public abstract void arreter(Processus pro, Partition par);
+        public abstract void Charger(Processus pro, Partition par);
+        public abstract void Arreter(Processus pro, Partition par);
     }
 }
