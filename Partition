@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     class Partition
     {
