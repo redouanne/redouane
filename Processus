@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     class Processus
     {
@@ -69,7 +69,22 @@ namespace Va_Et_Vient
 
         public void Afficher()
         {
-            Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est " + etat + " .");
+            if (etat == 'T')
+            {
+                Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est attente.");
+            }
+            if (etat=='A')
+            {
+                Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est actif.");
+            }
+            if(etat=='B')
+            {
+                Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est bloqué.");
+            }
+            if(etat=='F')
+            {
+                Console.WriteLine("Processus " + nom + " de taille " + taille + " ko, demande " + temps + " ms pour terminer. Son etat est fini.");
+            }
         }
     }
 }
