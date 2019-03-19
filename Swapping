@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     class Swapping
     {
@@ -21,63 +21,76 @@ namespace Va_Et_Vient
             Processus pr;
             int taille, adr1, adr2, grandt, i = 0, k = 0;
             List<Partition> lpz, mem;
-            List<Processus> mems=new List<Processus>();
+            List<Processus> mems = new List<Processus>();
             bool b = true;
             mem = MC.Getmemoire();
             lpz = MC.Getzone();
             Partition par = lpz.Last();
             grandt = par.GetTaille();
+            int nblpz = lpz.Count;
             while (nbprocess != 0)
             {
+                i = 0;
+                b = true;
+                nblpz = lpz.Count;
                 pr = file.Defiler();
                 taille = pr.Gettaille();
-                lpz= MC.Getzone();
-                while (lpz[i]!= null && b)
+                while (i<nblpz && b)
                 {
                     if (taille <= lpz[i].GetTaille())
                     {
                         b = false;
-                        adr1=lpz[i].GetAdresse();
+                        adr1 = lpz[i].GetAdresse();
                     }
                     i++;
                 }
-                if (b==false)
+                if (b == false)
                 {
                     k = 0;
-                    adr1 = lpz[i-1].GetAdresse();
+                    adr1 = lpz[i - 1].GetAdresse();
                     adr2 = mem[k].GetAdresse();
-                    while(adr2!=adr1)
+                    while (adr2 != adr1)
                     {
                         k++;
-                        adr2 = mem[k].GetTaille();
+                        adr2 = mem[k].GetAdresse();
                     }
+                    pr.Setetat('A');
                     mem[k].SetPrecessus(pr);
                     mem[k].SetEtat(true);
                     lpz.RemoveAt(i - 1);
                 }
                 else
                 {
-                    if (taille>=grandt)
+                    if (taille <= grandt)
                     {
+                        pr.Setetat('T');
                         mems.Add(pr);
                     }
-                }
+                    else {
+                        Console.WriteLine();
+                        Console.WriteLine("*****************message************************");
+                        Console.WriteLine("le processus " +pr.Getnom()+ " ne peut pas etre execute car il est tres grand");
+
+                    }
+                 }
+                nbprocess--;
             }
             MC.Setmemoire(mem);
             MC.Setzone(lpz);
             MS = new MemoireSecondaire(mems);
         }
 
-     public void Rempmsmc(int indicemc,int indicems)
+        public void Rempmsmc(int indicemc, int indicems)
         {
-            Processus p= MS.Recupprocess(indicems);
+            Processus p = MS.Recupprocess(indicems);
             List<Partition> lp = MC.Getmemoire();
+            p.Setetat('A');
             lp[indicemc].SetPrecessus(p);
             lp[indicemc].SetEtat(true);
             MC.Setmemoire(lp);
         }
 
-     public void EntrSrt(Partition par)
+        public void EntrSrt(Partition par)
         {
             List<Partition> lpar = MC.Getmemoire();
             List<Processus> lpro = MS.Getmemsec();
@@ -85,60 +98,77 @@ namespace Va_Et_Vient
             int indice = lpar.IndexOf(par);
             pr = lpar[indice].GetPrecessus();
             lpar[indice].SetEtat(false);
+            pr.Setetat('B');
             lpro.Add(pr);
             MC.Setmemoire(lpar);
             MS.Setmemsec(lpro);
         }
 
-     public void Rempzone()
+        public void FentSrt(Processus p)
         {
-            List<Partition> lp = MC.Getmemoire();
-            List<Partition> z = new List<Partition>();
-            int i = 0, s = 0, k = 0,b=0, taille1, taille2;
-            bool e, r=true;
-            while (lp[i]!=null)
+            List<Processus> lpro = MS.Getmemsec();
+            int indice = lpro.IndexOf(p);
+            if (lpro[indice].Getetat() == 'B')
             {
-                k = 0;
-                e = lp[i].GetEtat();
-                taille1 = lp[i].GetTaille();
-                if (e==false)
-                {
-                    while(z[k]!=null && r)
-                    {
-                        s = k;
-                        taille2 = z[k].GetTaille();
-                       if (taille1<=taille2)
-                        {
-                            r = false;
-                            while (z[s]!=null)
-                            {
-                                s++;
-                            }
-                            while(s>=k)
-                            {
-                                b = s - 1;
-                                z[s] = z[b];
-                                s--;
-                            }
-                            z[k] = lp[i];
-                        }
-                        k++;
-                    }
-                    if (r==true)
-                    {
-                        z[k] = lp[i];
-                    }
-                    
-                }
-                lp[i].SetEtat(true);
-                i++;
+                lpro[indice].Setetat('T');
+                MS.Setmemsec(lpro);
             }
-            MC.Setzone(z);
+            else { Console.WriteLine("le processus " + lpro[indice].Getnom() + " n'attend pas une E/S"); }
         }
 
-    public MemoireCentrale Getmc()
+        public void Ordzonelib()
         {
-           return MC;
+            List<Partition> lpz = MC.Getzone();
+            List<Partition> l1 = new List<Partition>();
+            List<Partition> l2 = lpz;
+            Partition pr, prpetit;
+            int petit = int.MaxValue;
+            int cpt1, cpt2, taille, indice = 0, nbite = lpz.Count, nbite2 = l2.Count;
+            for (cpt1 = 0; cpt1 < nbite; cpt1++)
+            {
+                nbite2 = l2.Count;
+                petit = int.MaxValue;
+                for (cpt2=0;cpt2<nbite2;cpt2++)
+                {
+                    pr = l2[cpt2];
+                    taille = pr.GetTaille();
+                    if (taille<=petit)
+                    {
+                        petit = taille;
+                        indice = cpt2;
+                    }
+                }
+                prpetit = l2[indice];
+                l2.RemoveAt(indice);
+                l1.Add(prpetit);
+            }
+            MC.Setzone(l1);
+        }
+
+        public int Rechzonlib(Processus p)
+        {
+            List<Partition> lz = MC.Getzone();
+            List<Partition> mem = MC.Getmemoire();
+            int taille = p.Gettaille();
+            int taille1, taille2=lz.Count;
+            bool trouv = true;
+            int position = 0;
+            while(position<taille2 && trouv)
+            {
+                taille1 = lz[position].GetTaille();
+               if (taille<=taille1)
+                { trouv = false; }
+                position++;
+            }
+            position -= 1;
+            if (trouv==true)
+            { position = -1; }
+            return position;
+        }
+
+        public MemoireCentrale Getmc()
+        {
+            return MC;
         }
 
         public MemoireSecondaire Getms()
