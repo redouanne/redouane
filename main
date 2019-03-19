@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Va_Et_Vient
+namespace va_et_vient
 {
     class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
             List<Partition> lipar = new List<Partition>();
             Console.Out.WriteLine("donnez la taille de memoire centrale:");
@@ -17,19 +17,17 @@ namespace Va_Et_Vient
             Console.Out.WriteLine("donnez le nombre de partitions:");
             chaine = Console.In.ReadLine();
             int nbpar = int.Parse(chaine);
-            if (nbpar==1)
+            if (nbpar == 1)
             {
-                lipar[0].SetAdresse(0);
-                lipar[0].SetTaille(tmc);
-                lipar[0].SetEtat(false);
+                Partition par = new Partition(0, tmc, false);
+                lipar.Add(par);
             }
             else
             {
-                int cpt, adr=0;
-                for(cpt=0;cpt<nbpar;cpt++)
+                int cpt, adr = 0;
+                for (cpt = 0; cpt < nbpar; cpt++)
                 {
-                    lipar[cpt].SetAdresse(adr);
-                    lipar[cpt].SetEtat(false);
+
                     if (cpt != (nbpar - 1))
                     {
                         Console.Out.WriteLine("donnez la taille de partition:");
@@ -41,22 +39,240 @@ namespace Va_Et_Vient
                             chaine = Console.In.ReadLine();
                             tpar = int.Parse(chaine);
                         }
-                        lipar[cpt].SetTaille(tpar);
+                        Partition par = new Partition(adr, tpar, false);
+                        lipar.Add(par);
                         tmc = tmc - tpar;
+                        adr += tpar;
                     }
                     else
                     {
-                        lipar[cpt].SetTaille(tmc);
+                        Partition par = new Partition(adr, tmc, false);
+                        lipar.Add(par);
                     }
                 }
             }
+
             Swapping swap = new Swapping(lipar);
             MemoireCentrale mc = swap.Getmc();
+        etiq1:
+            Console.Clear();
+            Console.WriteLine("1-afficher la memoire.");
+            Console.WriteLine("2-afficher la la liste des zones libres.");
+            Console.WriteLine("3-afficher la liste des zones libres ordonnées.");
+            Console.WriteLine("0-quiter");
+            Console.WriteLine("votre choix");
+            chaine = Console.ReadLine();
+            switch (chaine)
+            {
+                case "1":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("****************************la memoire*************************");
+                        Console.WriteLine();
+                        mc.AfficherMemoire();
+                        Console.ReadKey();
+                        goto etiq1;
+                    }
+                case "2":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("*************************les zones libres*************************");
+                        Console.WriteLine();
+                        mc.AfficherListeZoneLibre();
+                        Console.ReadKey();
+                        goto etiq1;
+                    }
+                case "3":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("************************la liste ordonne**********************************");
+                        Console.WriteLine();
+                        swap.Ordzonelib();
+                        mc.AfficherListeZoneLibre();
+                        Console.ReadKey();
+                        goto etiq1;
+                    }
+            }
+            Console.Clear();
             Console.Out.WriteLine("ecrire le nombre des processus:");
             chaine = Console.In.ReadLine();
             int nbpro = int.Parse(chaine);
             FileAtt fa = mc.RempProcess(nbpro);
+            Console.WriteLine();
+            Console.WriteLine("****************************les processus*****************************");
+            Console.WriteLine();
+            Console.Clear();
+            mc.AfficherFileAttente();
+            Console.ReadKey();
             swap.Rempmc(fa, nbpro);
+            Console.WriteLine();
+            MemoireSecondaire ms;
+            
+        etiq2:
+            Console.Clear();
+            Console.WriteLine("1-afficher la memoire apres l'execution des processus.");
+            Console.WriteLine("2-afficher la liste des zones libres.");
+            Console.WriteLine("3-afficher la memoire secondaire.");
+            Console.WriteLine("0-quiter");
+            Console.WriteLine("votre choix:");
+            chaine = Console.ReadLine();
+            switch (chaine)
+            {
+                case "1":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("*************************la memoire apres l'execustion des processus*********************");
+                        Console.WriteLine();
+                        mc.AfficherMemoire();
+                        Console.ReadKey();
+                        goto etiq2;
+                    }
+                case "2":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("************************la liste des zones libres*****************************");
+                        Console.WriteLine();
+                        mc.AfficherListeZoneLibre();
+                        Console.ReadKey();
+                        goto etiq2;
+                    }
+                case "3":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("******************************la memoire secondaire*************************");
+                        Console.WriteLine();
+                        ms = swap.Getms();
+                        ms.Affichermems();
+                        Console.ReadKey();
+                        goto etiq2;
+                    }
+        }
+            List<Partition> m;
+            int npr;
+            Partition pr;
+            Processus proo;
+        etiq3:
+            Console.Clear();
+            Console.WriteLine("1-afficher la memoire apres l'execution des processus.");
+            Console.WriteLine("2-afficher la liste des zones libres.");
+            Console.WriteLine("3-afficher la memoire secondaire.");
+            Console.WriteLine("4-executé une E/S.");
+            Console.WriteLine("5-fin d'une E/S.");
+            Console.WriteLine("6-execute un processus qui est stocké dans la memoire secondaire.");
+            Console.WriteLine("0-quiter");
+            Console.WriteLine("votre choix:");
+            chaine = Console.ReadLine();
+            switch (chaine)
+            {
+                case "1":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("*************************la memoire apres l'execustion des processus*********************");
+                        Console.WriteLine();
+                        mc.AfficherMemoire();
+                        Console.ReadKey();
+                        goto etiq3;
+                    }
+                case "2":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("************************la liste des zones libres*****************************");
+                        Console.WriteLine();
+                        mc.AfficherListeZoneLibre();
+                        Console.ReadKey();
+                        goto etiq3;
+                    }
+                case "3":
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine("******************************la memoire secondaire*************************");
+                        Console.WriteLine();
+                        ms = swap.Getms();
+                        ms.Affichermems();
+                        Console.ReadKey();
+                        goto etiq3;
+                    }
+                case "4":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("******************************la memoire centrale****************************");
+                        mc.AfficherMemoire();
+                        Console.WriteLine("*****************************************************************************");
+                        Console.WriteLine("donnez le num de partition pour executer l'E/S");
+                        chaine = Console.ReadLine();
+                        npr = int.Parse(chaine);
+                        m = mc.Getmemoire();
+                        pr = m[npr - 1];
+                        swap.EntrSrt(pr);
+                        mc.Ajzonelibre(pr);
+                        swap.Ordzonelib();
+                        goto etiq3;
+                    }
+                case "5":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("************************la memoire secondaire*************************");
+                        ms = swap.Getms();
+                        ms.Affichermems();
+                        Console.WriteLine("***************************************************************************");
+                        Console.WriteLine("donnez le num de processus pour finir l'E/S");
+                        chaine = Console.ReadLine();
+                        int nbp = int.Parse(chaine);
+                        ms = swap.Getms();
+                        List<Processus> prr = ms.Getmemsec();
+                        proo = prr[nbp - 1];
+                        swap.FentSrt(proo);
+                        Console.WriteLine();
+                        goto etiq3;
+                    }
+                case "6":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("********************************la memoire secondaire***************************");
+                        ms = swap.Getms();
+                        ms.Affichermems();
+                        Console.WriteLine("**********************************************************************************");
+                        Console.WriteLine("donnez la position de processus dans memoire secondaire pour executé dans mc ");
+                        chaine = Console.ReadLine();
+                        int pos = int.Parse(chaine);
+                        proo = ms.Recupprocess(pos - 1);
+                        int poss = swap.Rechzonlib(proo);
+                        m = mc.Getmemoire();
+                        if (poss != -1)
+                        {
+                            List<Partition> lz = mc.Getzone();
+                            int k = 0;
+                            int adr1 = lz[poss].GetAdresse();
+                            int adr = m[k].GetAdresse();
+                            while (adr != adr1)
+                            {
+                                k++;
+                                adr = m[k].GetAdresse();
+                            }
+                            m[k].SetEtat(true);
+                            proo.Setetat('A');
+                            m[k].SetPrecessus(proo);
+                            mc.Supzonelibre(m[k]);
+                            swap.Ordzonelib();
+                            Console.WriteLine("le processus " + proo.Getnom() + " est bien chargée.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("il n'ya aucune partition libre pour le processus " + proo.Getnom());
+                            ms.Ajprocess(proo);
+                            Console.ReadKey();
+                        }
+                        goto etiq3;
+                    }
+            }
+            
+            
         }
     }
 }
